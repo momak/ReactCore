@@ -17,37 +17,37 @@ namespace ReactCore.Controllers
         EmployeeDataAccessLayer objemployee = new EmployeeDataAccessLayer();
 
         [HttpGet]
-        [Route("api/Employee/Index")]
+        [Route("Index")]
         public IEnumerable<TblEmployee> Index()
         {
             return objemployee.GetAllEmployees();
         }
         [HttpPost]
-        [Route("api/Employee/Create")]
+        [Route("Create")]
         public int Create(TblEmployee employee)
         {
             return objemployee.AddEmployee(employee);
         }
         [HttpGet]
-        [Route("api/Employee/Details/{id}")]
+        [Route("Details/{id}")]
         public TblEmployee Details(int id)
         {
             return objemployee.GetEmployeeData(id);
         }
         [HttpPut]
-        [Route("api/Employee/Edit")]
+        [Route("Edit")]
         public int Edit(TblEmployee employee)
         {
             return objemployee.UpdateEmployee(employee);
         }
         [HttpDelete]
-        [Route("api/Employee/Delete/{id}")]
+        [Route("Delete/{id}")]
         public int Delete(int id)
         {
             return objemployee.DeleteEmployee(id);
         }
         [HttpGet]
-        [Route("api/Employee/GetCityList")]
+        [Route("GetCityList")]
         public IEnumerable<TblCities> Details()
         {
             return objemployee.GetCities();
