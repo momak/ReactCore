@@ -1,16 +1,13 @@
 ﻿import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-//import { actionCreators } from '../store/Employee';
 
 class FetchEmployee extends Component {
     constructor() {
         super();
         this.state = {
-            hits: [],
+            employeeArr: [],
             isLoading: false,
-            error: null,
+            error: null
         }
     }
 
@@ -27,7 +24,7 @@ class FetchEmployee extends Component {
                 }
             })
             .then(data => this.setState({
-                hits: data,
+                employeeArr: data,
                 isLoading: false
             }))
             .catch(error => this.setState({
@@ -36,8 +33,31 @@ class FetchEmployee extends Component {
             }))
     }
 
+    // Handle Delete request for an employee  
+    handleDelete(id: number) {
+        /* global location */
+        /* eslint no-restricted-globals: ["off", "location"] */
+        if (!confirm("Do you want to delete employee with Id: " + id))
+            return;
+        else {
+            fetch('api/Employee/Delete/' + id, {
+                method: 'delete'
+            }).then(data => {
+                this.setState(
+                    {
+                        employeeArr: this.state.employeeArr.filter((rec) => {
+                            return (rec.employeeId !== id);
+                        })
+                    });
+            });
+        }
+    }
+    handleEdit(id: number) {
+        this.props.history.push("/employee/edit/" + id);
+    }
+
     render() {
-        const { hits, isLoading, error } = this.state;
+        const { employeeArr, isLoading, error } = this.state;
 
         if (isLoading) {
             return <p>Loading ... </p>
@@ -46,27 +66,47 @@ class FetchEmployee extends Component {
             return <p>{error.message}</p>
         }
         return (
-            <table className='table'>
-                <thead>
-                    <tr>
-                        <th>EmployeeId</th>
-                        <th>Name</th>
-                        <th>City</th>
-                        <th>Department</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {hits.map(employees =>
-                        <tr key={employees.employeeId}>
-                            <td>{employees.employeeId}</td>
-                            <td>{employees.name}</td>
-                            <td>{employees.city}</td>
-                            <td>{employees.department}</td>
+            <div>
+                <h1>Employee Data</h1>
+                <p>This component demonstrates fetching Employee data from the server.</p>
+                <p>
+                    <Link to="/addemployee">Create New</Link>
+                </p>
+                <table className='table'>
+                    <thead>
+                        <tr>
+                            <th>EmployeeId</th>
+                            <th>Name</th>
+                            <th>City</th>
+                            <th>Department</th>
                         </tr>
-                    )}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {employeeArr.map(emp =>
+                            <tr key={emp.employeeId}>
+                                <td>{emp.employeeId}</td>
+                                <td>{emp.name}</td>
+                                <td>{emp.city}</td>
+                                <td>{emp.department}</td>
+                                <td>
+                                    <a className="action" onClick={(id) => this.handleEdit(emp.employeeId)}>Edit</a>  |
+                                <a className="action" onClick={(id) => this.handleDelete(emp.employeeId)}>Delete</a>
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
         )
-}
+    }
 }
 export default FetchEmployee
+
+
+export class EmployeeData {
+    employeeId: number = 0;
+    name: string = "";
+    gender: string = "";
+    city: string = "";
+    department: string = "";
+}

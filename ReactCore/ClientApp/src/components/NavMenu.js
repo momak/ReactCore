@@ -31,7 +31,7 @@ export default props => (
                 </LinkContainer>
                 <LinkContainer to={'/fetchemployee'}>
                     <NavItem>
-                        <Glyphicon glyph='th-list' /> Fetch Employee
+                        <Glyphicon glyph='glyphicon glyphicon-certificate' /> Fetch Employee
     </NavItem>
                 </LinkContainer>
             </Nav>
